@@ -52,6 +52,17 @@ function drawMap(geoData, climateData, year, dataType) {
       .append("path")
         .classed("country", true)
         .attr("d", path)
+        .on("click", function() {
+            var currentDataType = d3.select("input:checked")
+                                    .property("value");
+            var country = d3.select(this);
+            var isActive = country.classed("active");
+            var countryName = isActive ? "" : country.data()[0].properties.country;
+            drawBar(climateData, currentDataType, countryName);
+            highlightBars(+d3.select("#year").property("value"));
+            d3.selectAll(".country").classed("active", false);
+            country.classed("active", !isActive);
+        })
       .merge(update)
         .transition()
         .duration(750)
